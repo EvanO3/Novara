@@ -1,0 +1,19 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+# Environment & secrets
+.env
+application-local.properties
+
+# Spring / Maven
+target/
+*.class
+*.jar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
