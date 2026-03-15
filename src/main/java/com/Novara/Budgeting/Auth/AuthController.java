@@ -29,6 +29,7 @@ public class AuthController {
         public ResponseEntity<?> validatedToken(@RequestHeader("Authorization") String authHeader) {
             try{
                 String token = authHeader.substring(7); // extracting the token from the header
+                System.out.println("Handling business");
 
                 if(jwtService.validateToken(token)){
                     //String role = jwtService.extractUserRole(token);
