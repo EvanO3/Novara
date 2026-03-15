@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +22,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
     private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
             
                 String authHeader = request.getHeader("Authorization");
                 String token = null;
@@ -40,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         //personRole = jwtService.extractUserRole(token);
                         personId = jwtService.extractUserId(token);
                         personEmail= jwtService.extractUserEmail(token);
+                   
 
 
                     }catch(Exception e){
@@ -50,9 +55,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
 
                 /*Validate the token and then set the security context */
-                if(personId != null && personEmail !=null && SecurityContextHolder.getContext() == null){
+                if(personId != null && personEmail !=null && SecurityContextHolder.getContext().getAuthentication() == null){
                     Map<String, String> principal = Map.of("personId", personId, "personEmail", personEmail); 
                     if(jwtService.validateToken(token)){
+                       
                         //if the token is valid then create authentication object with role
                         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(principal,
                              null, 
