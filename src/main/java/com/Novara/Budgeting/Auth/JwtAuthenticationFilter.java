@@ -56,11 +56,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 /*Validate the token and then set the security context */
                 if(personId != null && personEmail !=null && SecurityContextHolder.getContext().getAuthentication() == null){
-                    Map<String, String> principal = Map.of("personId", personId, "personEmail", personEmail); 
+    
                     if(jwtService.validateToken(token)){
                        
                         //if the token is valid then create authentication object with role
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(principal,
+                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(personId,
                              null, 
                              Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                     );
