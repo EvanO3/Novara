@@ -3,7 +3,11 @@ package com.Novara.Budgeting.DTOs;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import com.Novara.Budgeting.Model.Source;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -31,6 +35,12 @@ public class TransactionDTO {
     @NotBlank(message = "Description cannot be empty")
     @Column(name = "description")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "source")
+    @NotNull(message = "Source cannot be blank")
+    private Source source;
+    
 
     /**this will be changed to cater to timestampz */
     @NotNull(message = "Date cannot be blank")
