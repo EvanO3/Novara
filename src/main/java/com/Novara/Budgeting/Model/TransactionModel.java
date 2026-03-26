@@ -3,6 +3,7 @@ package com.Novara.Budgeting.Model;
 import java.lang.ProcessBuilder.Redirect.Type;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -30,19 +32,26 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="Transaction")
+@Table(name="transactions")
 //Validations will Be added later
 public class TransactionModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "T_id")
-    private UUID Id;
+   
+    @Column(name = "transaction_id", updatable = false, nullable = false)
+    private UUID id;
 
-    @Column(name = "auth_Id")
+ @  PrePersist
+    public void generateId() {
+    if (this.id == null) {
+        this.id = UUID.randomUUID();
+    }
+}
+
+    @Column(name = "auth_id")
     private UUID authId;
 
     /*Big decimal because precision is important for math operations */
-    @NotBlank(message = "Amount must be filled in")
+    @NotNull(message = "Amount must be filled in")
     @DecimalMin(value = "0.00", message = "Budget must be positive")
     private BigDecimal amount;
 
@@ -60,22 +69,26 @@ public class TransactionModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "source")
-    @NotBlank(message = "Source cannot be blank")
+    @NotNull(message = "Source cannot be blank")
     private Source source;
 
     /**this will be changed to cater to timestampz */
-    @NotBlank(message = "Date cannot be blank")
+    @NotNull(message = "Date cannot be blank")
     @Column(name = "date")
-    private Date date;
+    private OffsetDateTime date;
 
     /**Usint instant as it works well for diff time zones */
-    @Column(name = "createdAt", updatable = false)
-    @CreationTimestamp //automatically sets time after creation
-    private Instant createdAt;
+    /*Since supabase takes care of the time, insertable false so jpa does not try to overide */
+    @Column(name = "created_at", updatable = false, insertable = false)
+    //@CreationTimestamp //automatically sets time after creation
+    private OffsetDateTime createdAt;
 
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     @UpdateTimestamp //Automatically updates after every update
-    private Instant updatedAt;
+    private OffsetDateTime updatedAt;
 
 
+   
+    
+    
 }
