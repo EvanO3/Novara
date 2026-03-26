@@ -2,6 +2,7 @@ package com.Novara.Budgeting.DTOs;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import com.Novara.Budgeting.Model.Source;
 
@@ -19,6 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransactionDTO {
+
+    UUID transactionId;
     
     @NotNull(message = "Amount must be filled in")
     @DecimalMin(value = "0.00", message = "Budget must be positive")
