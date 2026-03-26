@@ -23,7 +23,7 @@ import com.nimbusds.jwt.SignedJWT;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NoArgsConstructor;
 
 
@@ -122,6 +122,14 @@ public class JwtService {
 
 
 
+    public String extractToken(HttpServletRequest request){
+        try{
+             String token = request.getHeader("Authorization").substring(7);
+             return token;
+        }catch(Exception e){
+            return e.getMessage();
+        }
+    }
 
    
 
