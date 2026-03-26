@@ -6,5 +6,5 @@ import com.Novara.Budgeting.DTOs.TransactionDTO;
 
 public interface TransactionService {
 
-    TransactionDTO createTransaction(TransactionDTO transactionDTO, UUID profileId);
+    TransactionDTO createTransaction(TransactionDTO transactionDTO);
 }
